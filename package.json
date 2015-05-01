@@ -1,0 +1,33 @@
+{
+  "name": "color-schemer",
+  "version": "0.1.0",
+  "description": "Manage semantic color schemes and export them",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "bin": {
+    "color-schemer": "cli.js"
+  },
+  "files": [
+    "index.js",
+    "cli.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crucialfelix/color-schemer"
+  },
+  "author": "Chris Sattinger <crucialfelix@gmail.com> (https://github.com/crucialfelix)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crucialfelix/color-schemer/issues"
+  },
+  "homepage": "https://github.com/crucialfelix/color-schemer",
+  "dependencies": {},
+  "devDependencies": {
+    "mocha": "*"
+  }
+}
