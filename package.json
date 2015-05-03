@@ -4,7 +4,7 @@
   "description": "Manage semantic color schemes and export them",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./node_modules/jasmine/bin/jasmine.js && jshint *.js"
   },
   "engines": {
     "node": ">=0.10.0"
@@ -28,6 +28,7 @@
   "homepage": "https://github.com/crucialfelix/color-schemer",
   "dependencies": {},
   "devDependencies": {
-    "mocha": "*"
+    "jasmine": "^2.3.1",
+    "jshint": "^2.7.0"
   }
 }

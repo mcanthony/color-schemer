@@ -1,10 +1,10 @@
 'use strict';
 
 var assert = require('assert');
-var colorSchemer = require('./');
+var colorSchemer = require('../index.js');
 
 describe('initial', function(){
-  it('fail', function() {
-    assert(false);
+  it('lives', function() {
+    assert(true);
   });
 });
