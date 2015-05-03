@@ -26,7 +26,13 @@
     "url": "https://github.com/crucialfelix/color-schemer/issues"
   },
   "homepage": "https://github.com/crucialfelix/color-schemer",
-  "dependencies": {},
+  "dependencies": {
+    "colorable": "^1.0.5",
+    "commander": "^2.8.1",
+    "js-yaml": "^3.3.0",
+    "libxmljs": "^0.14.0",
+    "lodash": "^3.7.0"
+  },
   "devDependencies": {
     "jasmine": "^2.3.1",
     "jshint": "^2.7.0"
