@@ -223,4 +223,49 @@ describe('mapToScheme', function() {
     expect(result['name-bg']).toBeDefined();
   });
 
+  it('should resolve nested names', function() {
+    var map = {
+      'name': {
+        'fg': null,
+        'bg': '$secondary'
+      }
+    };
+    var scheme = {
+      secondary: '#990000'
+    };
+    var result = colorSchemer.mapToScheme(map, scheme);
+    expect(result['name-fg']).toBeDefined();
+    expect(result['name-bg']).toBeDefined();
+    expect(result['name-bg']).toBe(scheme.secondary);
+  });
+
+
+});
+
+
+describe('formatOutput', function() {
+  var scheme = {one: '#111111', 'two-bg': '#222222', 'three': null, 'four': undefined};
+
+  it('json', function() {
+    var result = colorSchemer.formatOutput(scheme, 'json');
+    expect(result).toBeDefined();
+  });
+
+  it('js', function() {
+    var result = colorSchemer.formatOutput(scheme, 'js');
+    expect(result).toBeDefined();
+  });
+
+  it('yaml', function() {
+    var result = colorSchemer.formatOutput(scheme, 'yaml');
+    expect(result).toBeDefined();
+    expect(result.indexOf('null')).toBe(-1);
+  });
+
+  it('scss', function() {
+    var result = colorSchemer.formatOutput(scheme, 'scss');
+    expect(result).toBeDefined();
+    expect(result.indexOf('null')).toBe(-1);
+    expect(result.indexOf('undefined')).toBe(-1);
+  });
 });

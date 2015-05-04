@@ -22,6 +22,11 @@ function loadPaletton(path) {
 }
 
 
+function loadJSON(path) {
+  return JSON.parse(fs.readFileSync(path, 'utf8'));
+}
+
+
 /**
  * convert an XML color scheme from paletton.com
  * to a simple dict
@@ -122,17 +127,69 @@ function mapToScheme(map, palette) {
 }
 
 
+function formatOutput(scheme, format) {
+  switch(format || 'json') {
+    case 'json':
+      return asJSON(scheme);
+    case 'js':
+      return asJS(scheme);
+    case 'scss':
+      return asSCSS(scheme);
+    case 'yaml':
+      return asYAML(scheme);
+    // h
+  }
+  throw new Error('Unsupported format: ' + format);
+}
+
+
+/**
+ * although there should be no null or undefined values
+ * because they would have been replaced by defaultColor,
+ * clean it to be sure.
+ */
+function clearEmpties(scheme) {
+  return _.mapValues(scheme, function(v) {
+    return _.isEmpty(v) ? '' : v;
+  });
+}
+
+
+function asJS(scheme) {
+  return 'module.exports = ' + asJSON(scheme) + ';\n';
+}
+
+
+function asJSON(scheme) {
+  return JSON.stringify(clearEmpties(scheme), null, 2);
+}
+
+
+function asSCSS(scheme) {
+  // $key:  value;
+  var rows = _.map(clearEmpties(scheme), function(v, k) {
+    return '$' + k + ':  ' + v;
+  });
+  return rows.join('\n');
+}
+
+
+function asYAML(scheme) {
+  return yaml.safeDump(clearEmpties(scheme));
+}
+
+
 
 /* ------------------------- commands ------------------------------------- */
 
 function convert(inPath, format) {
-  // console.log(inPath, format);
+  // only paletton supported for now
   var palette = loadPaletton(inPath);
   return JSON.stringify(palette, null, 2);
 }
 
 function makeCombos(palettePath, threshold, grays) {
-  var palette = JSON.parse(fs.readFileSync(palettePath, 'utf8'));
+  var palette = loadJSON(palettePath);
   if(grays) {
     palette = addGrays(palette);
   }
@@ -142,8 +199,9 @@ function makeCombos(palettePath, threshold, grays) {
 
 function mapScheme(yamlMap, jsonPalette, format) {
   var map = yaml.safeLoad(fs.readFileSync(yamlMap, 'utf8'));
-  var scheme = mapToScheme(map, jsonPalette);
-  return JSON.stringify(scheme, null, 2);
+  var palette = loadJSON(jsonPalette);
+  var scheme = mapToScheme(map, palette);
+  return formatOutput(scheme, format);
 }
 
 
@@ -156,5 +214,6 @@ module.exports = {
   // library functions
   parsePaletton: parsePaletton,
   addCombos: addCombos,
-  mapToScheme:mapToScheme
+  mapToScheme: mapToScheme,
+  formatOutput: formatOutput
 };
