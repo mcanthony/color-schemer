@@ -31,12 +31,7 @@ function parsePaletton(doc) {
   var palette = {};
   var colors = xmlDoc.find('//color');
   _.each(colors, function(c) {
-    palette[c.attr('id').value()] = {
-      rgb: c.attr('rgb').value(),
-      r: c.attr('r0').value(),
-      g: c.attr('g0').value(),
-      b: c.attr('b0').value()
-    };
+    palette[c.attr('id').value()] = c.attr('rgb').value();
   });
 
   return palette;
