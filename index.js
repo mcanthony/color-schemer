@@ -14,8 +14,7 @@ var fs = require('fs'),
    colorable = require('colorable');
 
 var defaultColor = '#999999',
-  defaultBg = '#FFFFFF',
-  defaultFg = '#000000';
+    defaultBg = '#FFFFFF';
 
 
 function loadPaletton(path) {
@@ -98,26 +97,32 @@ function addCombos(palette, threshold) {
 
 
 function mapToScheme(map, palette) {
-  return _.transform(map, function(result, value, key) {
+
+  function resolve(value, key) {
+      // does it end in -b*
+    var deflt = key.match(/\-b[a-z0-9]+$/) ? (map['default-bg'] || defaultBg) : (map['default'] || defaultColor);
     if(_.isString(value) && (value.substr(0, 1) === '$')) {
-      result[key] = palette[value.substr(1)] || map['default'] || defaultColor;
-      return true;
+      return palette[value.substr(1)] || deflt;
     }
     if(_.isNumber(value)) {
-      result[key] = value;
-      return true;
+      return value;
     }
     // undefined or empty string
     if(_.isEmpty(value)) {
-      if(key.substr(-3) === '-bg') {
-        value = map['default-bg'] || defaultBg;
-      } else if (key.substr(-3) === '-fg') {
-        value = map['default-fg'] || defaultFg;
-      } else {
-        value = map['default'] || defaultColor;
-      }
+      return deflt;
     }
-    result[key] = value;
+    return value;
+  }
+
+  return _.transform(map, function(result, value, key) {
+    if(_.isObject(value)) {
+      _.each(value, function(v, k) {
+        var concatKey = key + '-' + k;
+        result[concatKey] = resolve(v, concatKey);
+      });
+      return true;  // continue
+    }
+    result[key] = resolve(value, key);
   });
 }
 

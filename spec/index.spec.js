@@ -155,7 +155,7 @@ describe('addCombos', function(){
 });
 
 describe('mapToScheme', function() {
-  it('should set empty value to black/white default', function() {
+  it('should set empty value to default/white default', function() {
     var map = {
       'primary': null,
       'brushes-bg': null,
@@ -165,7 +165,7 @@ describe('mapToScheme', function() {
     var result = colorSchemer.mapToScheme(map, scheme);
     expect(result['primary']).toBe('#999999');
     expect(result['brushes-bg']).toBe('#FFFFFF');
-    expect(result['brushes-fg']).toBe('#000000');
+    expect(result['brushes-fg']).toBe('#999999');
   });
 
   it('should set empty value to default if default is set', function() {
@@ -174,14 +174,13 @@ describe('mapToScheme', function() {
       'brushes-bg': null,
       'brushes-fg': null,
       'default': '#990000',
-      'default-bg': '#222222',
-      'default-fg': '#009900'
+      'default-bg': '#222222'
     };
     var scheme = {};
     var result = colorSchemer.mapToScheme(map, scheme);
-    expect(result['primary']).toBe('#990000');
-    expect(result['brushes-bg']).toBe('#222222');
-    expect(result['brushes-fg']).toBe('#009900');
+    expect(result.primary).toBe(map.default);
+    expect(result['brushes-bg']).toBe(map['default-bg']);
+    expect(result['brushes-fg']).toBe(map.default);
   });
 
   it('should pass non-empty, non-strings through', function() {
@@ -208,6 +207,20 @@ describe('mapToScheme', function() {
     var result = colorSchemer.mapToScheme(map, scheme);
     expect(result.primary).toBe(scheme.primary);
     expect(result['not-found']).toBe('#999999');
+  });
+
+
+  it('should interpret nested names as -hyphenated', function() {
+    var map = {
+      'name': {
+        'fg': null,
+        'bg': null
+      }
+    };
+    var scheme = {};
+    var result = colorSchemer.mapToScheme(map, scheme);
+    expect(result['name-fg']).toBeDefined();
+    expect(result['name-bg']).toBeDefined();
   });
 
 });
