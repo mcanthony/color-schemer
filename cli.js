@@ -3,7 +3,9 @@
 
 var pkg = require('./package.json');
 var colorSchemer = require('./');
+var editor = require('./lib/editor');
 var program = require('commander');
+var opn = require('opn');
 
 program.version(pkg.version);
 program.usage('<command> [options]');
@@ -50,6 +52,21 @@ program
   .action(function(yamlMap, jsonPalette, options) {
     var out = colorSchemer.mapScheme(yamlMap, jsonPalette, options.format);
     console.log(out);
+  });
+
+
+/**
+ * color-schemer editor scheme.yaml combos.json
+ */
+program
+  .command('edit <yamlMap> <jsonPalette>')
+  .description('Edit a yaml map in a browser application.')
+  .option('-p, --port [value]', 'Port default 8090')
+  .action(function(yamlMap, jsonPalette, options) {
+    var port = options.port || 8090;
+    editor(yamlMap, jsonPalette, port);
+    opn('http://127.0.0.1:' + port);
+    console.log('ctrl-c to quit');
   });
 
 program.parse(process.argv);
