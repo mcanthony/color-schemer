@@ -1,8 +1,13 @@
 #!/usr/bin/env node
+
+//
+// Copyright (c) 2015 by Mattermind Labs. All Rights Reserved.
+//
+
 'use strict';
 
 var pkg = require('./package.json');
-var colorSchemer = require('./');
+var commands = require('./lib/commands');
 var editor = require('./lib/editor');
 var program = require('commander');
 var opn = require('opn');
@@ -20,7 +25,7 @@ program
   .description('Convert a color scheme file from paletton.xml to a simple json format')
   .option('-f, --format [value]', 'Input format (default: paletton.com XML)')
   .action(function(file, options) {
-    var out = colorSchemer.convert(file, options.format);
+    var out = commands.convert(file, options.format);
     console.log(out);
   });
 
@@ -35,7 +40,7 @@ program
   .option('-t, --threshold [value]', 'WCAG readability threshold')
   .option('-g, --grays [value]', 'Add grays to palette')
   .action(function(palettePath, options) {
-    var out = colorSchemer.makeCombos(palettePath, options.threshold, options.grays);
+    var out = commands.makeCombos(palettePath, options.threshold, options.grays);
     console.log(out);
   });
 
@@ -50,13 +55,13 @@ program
   .description('Export a color scheme from a yamlMap, mapping named values to colors using a JSON palette file')
   .option('-f, --format [value]', 'Output format')
   .action(function(yamlMap, jsonPalette, options) {
-    var out = colorSchemer.mapScheme(yamlMap, jsonPalette, options.format);
+    var out = commands.mapScheme(yamlMap, jsonPalette, options.format);
     console.log(out);
   });
 
 
 /**
- * color-schemer editor scheme.yaml combos.json
+ * color-schemer edit scheme.yaml combos.json
  */
 program
   .command('edit <yamlMap> <jsonPalette>')
