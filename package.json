@@ -17,7 +17,8 @@
   "browserify": {
     "transform": [
       "reactify",
-      "envify"
+      "envify",
+      "brfs"
     ]
   },
   "files": [
@@ -51,6 +52,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "brfs": "^1.4.0",
     "browserify": "^10.1.0",
     "envify": "^3.4.0",
     "jasmine": "^2.3.1",

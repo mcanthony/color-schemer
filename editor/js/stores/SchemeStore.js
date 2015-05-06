@@ -7,6 +7,8 @@ var Dispatcher = require('../Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var constants = require('../constants');
 var assign = require('object-assign');
+var colors = require('../../../lib/colors');
+var PaletteStore = require('../stores/PaletteStore');
 
 var CHANGE_EVENT = 'change';
 
@@ -37,6 +39,18 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
 
   path: function() {
     return _path;
+  },
+
+  colorForVar: function(varname, value) {
+    return colors.colorForVar(_schemeVars, PaletteStore.getAll(), varname, value);
+  },
+
+  /**
+   * @returns {object} -
+   *          {'brushes-bg': '#000000', 'brushes-fg': '#999999'}
+   */
+  colorsForComboVar: function(varname, obj) {
+    return colors.colorsForCombo(_schemeVars, PaletteStore.getAll(), varname, obj);
   },
 
   selected: function() {
@@ -71,7 +85,7 @@ Dispatcher.register(function(action) {
   switch(action.actionType) {
 
     case constants.SET_SCHEME:
-      _schemeVars = assign({}, action.schemeVars);
+      _schemeVars = assign({}, action.scheme);
       _path = action.path;
       SchemeVarStore.emitChange();
       break;

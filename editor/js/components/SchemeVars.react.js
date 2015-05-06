@@ -4,6 +4,8 @@
 
 var React = require('react');
 var SchemeStore = require('../stores/SchemeStore');
+var SchemeVar = require('./SchemeVar.react');
+var _ = require('lodash');
 
 function getState() {
   return {
@@ -31,10 +33,16 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    // collect scheme vars
+    var svs = _.map(this.state.schemeVars, function(value, key) {
+      return (
+        <SchemeVar key={key} name={key} value={value} />
+      );
+    });
+
     return (
       <div>
         <h1>{this.state.path}</h1>
+        {svs}
       </div>
     );
   }
