@@ -10,7 +10,7 @@
     "color-schemer": "cli.js"
   },
   "scripts": {
-    "test": "./node_modules/jasmine/bin/jasmine.js && jshint *.js",
+    "test": "./node_modules/jasmine/bin/jasmine.js && jshint lib/*.js && jsxhint editor/js/**/*.js editor/js/*.js '!editor/js/bundle.js'",
     "start": "watchify -o editor/js/bundle.js -v -d editor/js/app.js",
     "build": "browserify ./editor -t [envify --NODE_ENV production] | uglifyjs -cm > editor/js/bundle.min.js"
   },
@@ -57,6 +57,7 @@
     "envify": "^3.4.0",
     "jasmine": "^2.3.1",
     "jshint": "^2.7.0",
+    "jsxhint": "^0.14.0",
     "reactify": "^1.1.0",
     "uglify-js": "^2.4.21",
     "watchify": "^3.2.1"
