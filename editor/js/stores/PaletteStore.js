@@ -21,9 +21,10 @@ var _combos = {};
  * @param {object} updates An object literal containing only the data to be
  *     updated.
  */
-function update(name, updates) {
-  _swatches[name] = assign({}, _swatches[name], updates);
-}
+// function update(name, updates) {
+//   _swatches[name] = assign({}, _swatches[name], updates);
+// }
+
 
 var PaletteStore = assign({}, EventEmitter.prototype, {
 

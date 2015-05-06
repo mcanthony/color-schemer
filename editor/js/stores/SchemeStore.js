@@ -23,9 +23,9 @@ var _path = null;
  * @param {object} updates An object literal containing only the data to be
  *     updated.
  */
-function update(name, updates) {
-  _schemeVars[name] = assign({}, _schemeVars[name], updates);
-}
+// function update(name, updates) {
+//   _schemeVars[name] = assign({}, _schemeVars[name], updates);
+// }
 
 
 var SchemeVarStore = assign({}, EventEmitter.prototype, {

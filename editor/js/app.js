@@ -7,5 +7,5 @@ var ColorSchemerApp = require('./components/ColorSchemerApp.react.js');
 
 React.render(
   <ColorSchemerApp />,
-  document.getElementsByTagName('body')[0]
+  window.document.getElementsByTagName('body')[0]
 );
