@@ -27,6 +27,11 @@ function loadJSON(path) {
 }
 
 
+function loadYAML(path) {
+  return yaml.safeLoad(fs.readFileSync(path, 'utf8'));
+}
+
+
 /**
  * convert an XML color scheme from paletton.com
  * to a simple dict
@@ -58,12 +63,12 @@ function addGrays(palette) {
     'darken-3': '#424242',
     'darken-4': '#212121'
   };
-  return _.assign(palette, _.mapValues(grays, function(g) { return {rgb: g}; }));
+  return _.assign(palette, grays);
 }
 
 
 /**
- * expand a palette into a larger list of color combinations
+ * return a palette with color combinations
  * filtered by accessibility
  *
  * aa - greater than 4.5 (for normal sized text)
@@ -72,26 +77,22 @@ function addGrays(palette) {
  * aaaLarge - greater than 4.5
  */
 function addCombos(palette, threshold) {
-  var colors = _.mapValues(palette, function(p) {
-    return p.rgb;
-  });
-  var combos = colorable(colors, {threshold: threshold || 0});
+  var combos = colorable(palette, {threshold: threshold || 0});
   // sort by hsl
   combos.sort(function(a, b) {
     return a.values.hsl > b.values.hsl;
   });
-  var result = _.assign({}, palette);
-  // console.log(JSON.stringify(palette, null, 2));
-  _.each(combos, function(c) {
-    result[c.name].combinations = _.map(c.combinations, function(fg) {
-      var key = _.findKey(palette, function(p) {
-        return p.rgb === fg.hex;
+  var result = {};
+  _.each(combos, function(color) {
+    result[color.name] = _.map(color.combinations,
+      function(combo) {
+        var key = _.findKey(palette, function(hex) {
+          return hex === combo.hex;
+        });
+        return key;
       });
-      return key || fg.hex;
-    });
   });
 
-  // console.log(JSON.stringify(result, null, 2));
   return result;
 }
 
@@ -193,12 +194,13 @@ function makeCombos(palettePath, threshold, grays) {
   if(grays) {
     palette = addGrays(palette);
   }
-  var expanded = addCombos(palette, threshold || 3);
-  return JSON.stringify(expanded, null, 2);
+  // {name: [name, name], ...}
+  var combos = addCombos(palette, threshold || 3);
+  return JSON.stringify(combos, null, 2);
 }
 
 function mapScheme(yamlMap, jsonPalette, format) {
-  var map = yaml.safeLoad(fs.readFileSync(yamlMap, 'utf8'));
+  var map = loadYAML(yamlMap);
   var palette = loadJSON(jsonPalette);
   var scheme = mapToScheme(map, palette);
   return formatOutput(scheme, format);
@@ -214,6 +216,9 @@ module.exports = {
   // library functions
   parsePaletton: parsePaletton,
   addCombos: addCombos,
+  addGrays: addGrays,
   mapToScheme: mapToScheme,
-  formatOutput: formatOutput
+  formatOutput: formatOutput,
+  loadYAML: loadYAML,
+  loadJSON: loadJSON
 };
