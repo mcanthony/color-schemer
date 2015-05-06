@@ -7,11 +7,13 @@ var Dispatcher = require('../Dispatcher');
 var EventEmitter = require('events').EventEmitter;
 var constants = require('../constants');
 var assign = require('object-assign');
+var colors = require('../../../lib/colors');
 
 var CHANGE_EVENT = 'change';
 
 var _swatches = {};
 var _path = null;
+var _combos = {};
 
 /**
  * Update a scheme_var item
@@ -34,6 +36,14 @@ var PaletteStore = assign({}, EventEmitter.prototype, {
 
   path: function() {
     return _path;
+  },
+
+  combosForColor: function(colorName) {
+    return _combos[colorName] || [];
+  },
+
+  colorForName: function(colorName) {
+    return _swatches[colorName];
   },
 
   emitChange: function() {
@@ -61,8 +71,9 @@ Dispatcher.register(function(action) {
   switch(action.actionType) {
 
     case constants.SET_PALETTE:
-      _swatches = assign({}, action.palettes);
+      _swatches = assign({}, action.palette);
       _path = action.path;
+      _combos = colors.addCombos(_swatches, 3);
       PaletteStore.emitChange();
       break;
 

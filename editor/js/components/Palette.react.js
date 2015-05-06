@@ -4,6 +4,9 @@
 
 var React = require('react');
 var PaletteStore = require('../stores/PaletteStore');
+var Swatch = require('./Swatch.react');
+var _ = require('lodash');
+
 
 function getState() {
   return {
@@ -31,10 +34,16 @@ module.exports = React.createClass({
   },
 
   render: function() {
-    // collect Palette vars
+    var svs = _.map(this.state.swatches, function(value, key) {
+      return (
+        <Swatch key={key} name={key} value={value} />
+      );
+    });
+
     return (
       <div>
         <h1>{this.state.path}</h1>
+        {svs}
       </div>
     );
   }
