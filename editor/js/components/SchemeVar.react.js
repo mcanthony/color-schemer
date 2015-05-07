@@ -4,6 +4,7 @@
 
 var React = require('react');
 var SchemeStore = require('../stores/SchemeStore');
+var Actions = require('../actions');
 var colors = require('../../../lib/colors');
 var _ = require('lodash');
 
@@ -31,16 +32,16 @@ function fg(combo) {
 
 module.exports = React.createClass({
 
-  // getInitialState: function() {
-  //   return getState();
-  // },
-
   render: function() {
-    var defaultStyle = {
-      background: '#FFFFFF',
-      color: '#FF0000'
-    },
-    style={};
+    var
+      defaultStyle = {
+        background: '#FFFFFF',
+        color: '#FF0000'
+      },
+      style = {},
+      styles = [defaultStyle],
+      isSelected = SchemeStore.selected() === this.props.name;
+
     if(_.isObject(this.props.value)) {
       var combo = SchemeStore.colorsForComboVar(this.props.name, this.props.value);
       style.background = bg(combo);
@@ -49,22 +50,31 @@ module.exports = React.createClass({
       style.background = SchemeStore.colorForVar(this.props.name, this.props.value);
       style.color = '#666666';
     }
+    styles.push(style);
 
-    // but defaults are already resolved
-    var somethingMissing = {};
+    // TODO defaults are already resolved
+    // so this will never show anything as unset
     if(!(style.background && style.color)) {
-      somethingMissing = {
+      styles.push({
         'font-style': 'italic',
         border: '1px solid #ff0000'
-      };
+      });
     }
 
-    var styles = _.extend(defaultStyle, style, somethingMissing);
+    styles.push({
+      border: '1px solid ' + (isSelected ? '#000000' : style.background || '#FFFFFF')
+    });
+
+    style = _.assign.apply(this, styles);
     return (
-      <div style={styles}>
+      <div style={style} onClick={this.handleClick} className='schemeVar'>
         <span>{this.props.name}</span>
       </div>
     );
+  },
+
+  handleClick: function(event) {
+    Actions.selectSchemeVar(this.props.name);
   }
 
 });

@@ -7,7 +7,8 @@ var keyMirror = require('keymirror');
 module.exports = keyMirror({
   SET_SCHEME: null,
   SET_PALETTE: null,
-  SELECT: null,
+  SELECT_SCHEME_VAR: null,
+  SELECT_SWATCH: null,
   SET_COLOR: null,
   SAVE: null
 });

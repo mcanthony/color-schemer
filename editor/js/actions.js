@@ -20,9 +20,14 @@ module.exports = {
       palette: palette,
       path: path
     });
-  }
+  },
 
-  // select
+  selectSchemeVar: function(name) {
+    Dispatcher.dispatch({
+      actionType: constants.SELECT_SCHEME_VAR,
+      name: name
+    });
+  }
   // setColor
   // save
 

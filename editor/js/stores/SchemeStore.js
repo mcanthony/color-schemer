@@ -53,11 +53,12 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
     return colors.colorsForCombo(_schemeVars, PaletteStore.getAll(), varname, obj);
   },
 
+  select: function(name) {
+    _selected = name;
+    this.emitChange();
+  },
   selected: function() {
-    if(!_selected) {
-      return undefined;
-    }
-    return _schemeVars[_selected];
+    return _selected;
   },
 
   emitChange: function() {
@@ -90,9 +91,8 @@ Dispatcher.register(function(action) {
       SchemeVarStore.emitChange();
       break;
 
-    case constants.SELECT:
-      _selected = action.id;
-      SchemeVarStore.emitChange();
+    case constants.SELECT_SCHEME_VAR:
+      SchemeVarStore.select(action.name);
       break;
 
     case constants.SET_COLOR:

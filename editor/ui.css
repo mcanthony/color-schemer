@@ -1,7 +1,12 @@
 
 .swatch {
+  cursor: pointer;
 }
 .swatch .combo {
   padding: 1em;
   display: inline-block;
+}
+.schemeVar {
+  padding: 1em;
+  cursor: pointer;
 }
