@@ -4,6 +4,7 @@
 
 var React = require('react');
 var PaletteStore = require('../stores/PaletteStore');
+var SchemeStore = require('../stores/SchemeStore');
 var Swatch = require('./Swatch.react');
 var _ = require('lodash');
 
@@ -23,10 +24,12 @@ module.exports = React.createClass({
 
   componentDidMount: function() {
     PaletteStore.addChangeListener(this._onChange);
+    SchemeStore.addChangeListener(this._onChange);
   },
 
   componentWillUnmount: function() {
     PaletteStore.removeChangeListener(this._onChange);
+    SchemeStore.removeChangeListener(this._onChange);
   },
 
   _onChange: function() {

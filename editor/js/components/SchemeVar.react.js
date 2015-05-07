@@ -56,7 +56,7 @@ module.exports = React.createClass({
     // so this will never show anything as unset
     if(!(style.background && style.color)) {
       styles.push({
-        'font-style': 'italic',
+        fontStyle: 'italic',
         border: '1px solid #ff0000'
       });
     }

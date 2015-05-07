@@ -10,5 +10,6 @@ module.exports = keyMirror({
   SELECT_SCHEME_VAR: null,
   SELECT_SWATCH: null,
   SET_COLOR: null,
+  SET_COMBO: null,
   SAVE: null
 });

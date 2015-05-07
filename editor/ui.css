@@ -1,6 +1,8 @@
 
 .swatch {
   cursor: pointer;
+  padding: 1em;
+  display: inline-block;
 }
 .swatch .combo {
   padding: 1em;

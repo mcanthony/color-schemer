@@ -9,6 +9,7 @@ var constants = require('../constants');
 var assign = require('object-assign');
 var colors = require('../../../lib/colors');
 var PaletteStore = require('../stores/PaletteStore');
+var _ = require('lodash');
 
 var CHANGE_EVENT = 'change';
 
@@ -52,11 +53,10 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
   colorsForComboVar: function(varname, obj) {
     return colors.colorsForCombo(_schemeVars, PaletteStore.getAll(), varname, obj);
   },
-
-  select: function(name) {
-    _selected = name;
-    this.emitChange();
+  varIsCombo: function(name) {
+    return _.isObject(_schemeVars[name]);
   },
+
   selected: function() {
     return _selected;
   },
@@ -65,16 +65,10 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
     this.emit(CHANGE_EVENT);
   },
 
-  /**
-   * @param {function} callback
-   */
   addChangeListener: function(callback) {
     this.on(CHANGE_EVENT, callback);
   },
 
-  /**
-   * @param {function} callback
-   */
   removeChangeListener: function(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
@@ -92,12 +86,20 @@ Dispatcher.register(function(action) {
       break;
 
     case constants.SELECT_SCHEME_VAR:
-      SchemeVarStore.select(action.name);
+      _selected = action.name;
+      SchemeVarStore.emitChange();
       break;
 
     case constants.SET_COLOR:
-      // set color to selected item
-      console.log(action.color);
+      _schemeVars[_selected] = '$' + action.name;
+      SchemeVarStore.emitChange();
+      break;
+
+    case constants.SET_COMBO:
+      var obj = _schemeVars[_selected];
+      obj[colors.comboFgKey(obj)] = '$' + action.fg;
+      obj[colors.comboBgKey(obj)] = '$' + action.bg;
+      SchemeVarStore.emitChange();
       break;
 
     default:
