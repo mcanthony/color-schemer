@@ -18,17 +18,6 @@ var _selected = null;
 var _path = null;
 
 
-/**
- * Update a scheme_var item
- * @param  {string} varname
- * @param {object} updates An object literal containing only the data to be
- *     updated.
- */
-// function update(name, updates) {
-//   _schemeVars[name] = assign({}, _schemeVars[name], updates);
-// }
-
-
 var SchemeVarStore = assign({}, EventEmitter.prototype, {
 
   /**
@@ -59,6 +48,30 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
 
   selected: function() {
     return _selected;
+  },
+
+  selectedColorName: function() {
+    var sel = _schemeVars[_selected];
+    if(!sel) {
+      return;
+    }
+    if(_.isObject(sel)) {
+      sel = sel[colors.comboBgKey(sel)];
+    }
+    if(sel[0] === '$') {
+      return sel.substr(1);
+    }
+  },
+  selectedForegroundColorName: function() {
+    var sel = _schemeVars[_selected];
+    if(!sel) {
+      return;
+    }
+    // should always be a combo object
+    sel = sel[colors.comboFgKey(sel)];
+    if(sel[0] === '$') {
+      return sel.substr(1);
+    }
   },
 
   emitChange: function() {

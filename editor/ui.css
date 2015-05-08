@@ -1,14 +1,28 @@
 
+.scheme {
+  width: 49%;
+  float: left;
+}
+.palette {
+  width: 49%;
+  float: right;
+}
+
 .swatch {
   cursor: pointer;
   padding: 1em;
-  display: inline-block;
 }
 .swatch .combo {
   padding: 1em;
   display: inline-block;
+  margin: 2px;
 }
 .schemeVar {
   padding: 1em;
   cursor: pointer;
+}
+
+h6 {
+  margin: 0 0 9px;
+  font-size: 18px;
 }

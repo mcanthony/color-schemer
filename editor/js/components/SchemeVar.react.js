@@ -4,6 +4,7 @@
 
 var React = require('react');
 var SchemeStore = require('../stores/SchemeStore');
+var PaletteStore = require('../stores/PaletteStore');
 var Actions = require('../actions');
 var colors = require('../../../lib/colors');
 var _ = require('lodash');
@@ -30,16 +31,29 @@ function fg(combo) {
 }
 
 
+var uiStyles = {
+  default: {
+    background: '#FFFF0F',
+    color: '#FF00F0'
+  },
+  missing: {
+    fontStyle: 'italic',
+    border: '1px solid #ff0000'
+  },
+  selected: {
+    border: '1px solid #000000'
+  },
+  notSelected: {
+    border: '1px solid #FFFFFF'
+  }
+};
+
 module.exports = React.createClass({
 
   render: function() {
     var
-      defaultStyle = {
-        background: '#FFFFFF',
-        color: '#FF0000'
-      },
       style = {},
-      styles = [defaultStyle],
+      styles = [uiStyles.default],
       isSelected = SchemeStore.selected() === this.props.name;
 
     if(_.isObject(this.props.value)) {
@@ -48,22 +62,17 @@ module.exports = React.createClass({
       style.color = fg(combo);
     } else {
       style.background = SchemeStore.colorForVar(this.props.name, this.props.value);
-      style.color = '#666666';
+      style.color = uiStyles.default.color;
     }
     styles.push(style);
 
     // TODO defaults are already resolved
     // so this will never show anything as unset
     if(!(style.background && style.color)) {
-      styles.push({
-        fontStyle: 'italic',
-        border: '1px solid #ff0000'
-      });
+      styles.push(uiStyles.missing);
     }
 
-    styles.push({
-      border: '1px solid ' + (isSelected ? '#000000' : style.background || '#FFFFFF')
-    });
+    styles.push(isSelected ? uiStyles.selected : uiStyles.notSelected);
 
     style = _.assign.apply(this, styles);
     return (

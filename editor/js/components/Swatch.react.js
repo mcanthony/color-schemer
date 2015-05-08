@@ -9,6 +9,14 @@ var Actions = require('../actions');
 // var colors = require('../../../lib/colors');
 var _ = require('lodash');
 
+var uiStyles = {
+  selected: {
+    border: '1px solid #000000'
+  },
+  notSelected: {
+    border: '1px solid #FFFFFF'
+  }
+};
 
 module.exports = React.createClass({
 
@@ -22,13 +30,21 @@ module.exports = React.createClass({
 
   render: function() {
     var self = this;
-    var combos;
+    var
+      combos,
+      combosForColor = PaletteStore.combosForColor(this.props.name),
+      selectedColor = SchemeStore.selectedColorName(),
+      selectedFg = SchemeStore.selectedForegroundColorName();
+
     if(this.showCombos()) {
-      combos = _.map(PaletteStore.combosForColor(this.props.name), function(color) {
+      combos = _.map(combosForColor, function(color) {
+        var hex = PaletteStore.colorForName(color);
         var style = {
           background: self.props.value,
-          color: PaletteStore.colorForName(color)
+          color: hex,
         };
+        style = _.extend(style, color === selectedFg ? uiStyles.selected : uiStyles.notSelected);
+
         function onClick(event) {
           self.handleComboClick(event, color);
         }
@@ -38,13 +54,15 @@ module.exports = React.createClass({
       });
     }
 
-    var style={
-      background: this.props.value
+    var style = {
+      background: this.props.value,
+      color: PaletteStore.colorForName(combosForColor[0])
     };
+    style = _.extend(style, this.props.value === selectedColor ? uiStyles.selected : uiStyles.notSelected);
 
     return (
       <div style={style} className="swatch" onClick={this.handleClick}>
-        <span>{this.props.name}</span>
+        <h6>{this.props.name}</h6>
         {combos}
       </div>
     );
