@@ -64,7 +64,7 @@ program
  * color-schemer edit scheme.yaml combos.json
  */
 program
-  .command('edit <yamlMap> <jsonPalette>')
+  .command('edit <yamlMap> [jsonPalette]')
   .description('Edit a yaml map in a browser application.')
   .option('-p, --port [value]', 'Port default 8090')
   .action(function(yamlMap, jsonPalette, options) {
