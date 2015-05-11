@@ -36,6 +36,7 @@
   },
   "homepage": "https://github.com/crucialfelix/color-schemer",
   "dependencies": {
+    "body-parser": "^1.12.3",
     "colorable": "^1.0.5",
     "commander": "^2.8.1",
     "connect": "^3.3.5",

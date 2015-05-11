@@ -25,6 +25,7 @@ module.exports = React.createClass({
     return (
       <div>
         <div className="scheme">
+          <button onClick={Actions.save}>Save</button>
           <SchemeVars />
         </div>
         <div className="palette">

@@ -4,6 +4,9 @@
 
 var Dispatcher = require('./Dispatcher');
 var constants = require('./constants');
+var PaletteStore = require('./stores/PaletteStore');
+var SchemeStore = require('./stores/SchemeStore');
+var $ = require('jquery');
 
 module.exports = {
 
@@ -49,9 +52,29 @@ module.exports = {
       bg: bg,
       fg: fg
     });
+  },
+
+  save: function() {
+    var data = {
+      scheme: SchemeStore.getAll(),
+      schemePath: SchemeStore.path(),
+      palette: PaletteStore.getAll(),
+      palettePath: PaletteStore.path()
+    };
+    $.ajax({
+      method: 'POST',
+      url: '/save',
+      contentType: 'application/json',
+      data: JSON.stringify(data),
+      dataType: 'json' // reply is expected to be JSON
+    })
+      .then(function(data) {
+        console.log('success', data);
+        // constants.CLEAR_DIRTY_FLAG
+      },function(err) {
+        console.error('failed to save:', err);
+        // constants.ERROR
+      });
   }
-
-
-  // SAVE
 
 };
