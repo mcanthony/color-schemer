@@ -4,7 +4,6 @@
 
 var React = require('react');
 var SchemeStore = require('../stores/SchemeStore');
-var PaletteStore = require('../stores/PaletteStore');
 var Actions = require('../actions');
 var colors = require('../../../lib/colors');
 var _ = require('lodash');
