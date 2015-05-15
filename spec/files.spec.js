@@ -8,7 +8,7 @@ var doc = '<palette><url>http://paletton.com/#uid=65f1g1kNihpRU8TP2dWBMmHrDrWkh7
 describe('parsePaletton', function() {
   it('should convert xml to dict', function() {
     var result = files.parsePaletton(doc);
-    expect(result['primary-0']).toBe('740037');
+    expect(result['primary-0']).toBe('#740037');
   });
 });
 
