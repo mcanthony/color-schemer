@@ -122,3 +122,23 @@ describe('outputVars', function() {
   });
 
 });
+
+
+describe('nestedOutputVars', function() {
+  it('should return the vars nestsed', function() {
+    var scheme = {
+      brushes: {
+        fg: '#000000',
+        bg: '$light-gray'
+      }
+    };
+    var palette = {
+      'light-gray': '#999999'
+    };
+
+    var result = colors.nestedOutputVars(scheme, palette);
+    expect(result.brushes).toBeDefined();
+    expect(result.brushes.fg).toBe('#000000');
+    expect(result.brushes.bg).toBe(palette['light-gray']);
+  });
+});
