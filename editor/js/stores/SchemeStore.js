@@ -58,9 +58,10 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
     if(_.isObject(sel)) {
       sel = sel[colors.comboBgKey(sel)];
     }
-    if(sel[0] === '$') {
+    if(sel && (sel[0] === '$')) {
       return sel.substr(1);
     }
+    return sel;
   },
   selectedForegroundColorName: function() {
     var sel = _schemeVars[_selected];
@@ -69,9 +70,10 @@ var SchemeVarStore = assign({}, EventEmitter.prototype, {
     }
     // should always be a combo object
     sel = sel[colors.comboFgKey(sel)];
-    if(sel[0] === '$') {
+    if(sel && (sel[0] === '$')) {
       return sel.substr(1);
     }
+    return sel;
   },
 
   emitChange: function() {
