@@ -36,89 +36,89 @@ describe('addCombos', function(){
   });
 });
 
-describe('mapToScheme', function() {
+describe('outputVars', function() {
   it('should set empty value to default/white default', function() {
-    var map = {
+    var scheme = {
       'primary': null,
       'brushes-bg': null,
       'brushes-fg': null
     };
-    var scheme = {};
-    var result = colors.mapToScheme(map, scheme);
+    var palette = {};
+    var result = colors.outputVars(scheme, palette);
     expect(result.primary).toBe('#999999');
     expect(result['brushes-bg']).toBe('#FFFFFF');
     expect(result['brushes-fg']).toBe('#999999');
   });
 
   it('should set empty value to default if default is set', function() {
-    var map = {
+    var scheme = {
       'primary': null,
       'brushes-bg': null,
       'brushes-fg': null,
       'default': '#990000',
       'default-bg': '#222222'
     };
-    var scheme = {};
-    var result = colors.mapToScheme(map, scheme);
-    expect(result.primary).toBe(map.default);
-    expect(result['brushes-bg']).toBe(map['default-bg']);
-    expect(result['brushes-fg']).toBe(map.default);
+    var palette = {};
+    var result = colors.outputVars(scheme, palette);
+    expect(result.primary).toBe(scheme.default);
+    expect(result['brushes-bg']).toBe(scheme['default-bg']);
+    expect(result['brushes-fg']).toBe(scheme.default);
   });
 
   it('should pass non-empty, non-strings through', function() {
-    var map = {
+    var scheme = {
       'thing': 2,
       'zero': 0,
       'color': '#000099'
     };
-    var scheme = {};
-    var result = colors.mapToScheme(map, scheme);
+    var palette = {};
+    var result = colors.outputVars(scheme, palette);
     expect(result.thing).toBe(2);
     expect(result.zero).toBe(0);
     expect(result.color).toBe('#000099');
   });
 
   it('should resolve variable names from palette', function() {
-    var map = {
+    var scheme = {
       'primary': '$primary',
       'not-found': '$not-found'
     };
-    var scheme = {
+    var palette = {
       'primary': '#FF0000'
     };
-    var result = colors.mapToScheme(map, scheme);
-    expect(result.primary).toBe(scheme.primary);
+    var result = colors.outputVars(scheme, palette);
+    expect(result.primary).toBe(palette.primary);
     expect(result['not-found']).toBe('#999999');
   });
 
 
   it('should interpret nested names as -hyphenated', function() {
-    var map = {
+    var scheme = {
       'name': {
         'fg': null,
         'bg': null
       }
     };
-    var scheme = {};
-    var result = colors.mapToScheme(map, scheme);
+    var palette = {};
+    var result = colors.outputVars(scheme, palette);
     expect(result['name-fg']).toBeDefined();
     expect(result['name-bg']).toBeDefined();
   });
 
   it('should resolve nested names', function() {
-    var map = {
+    var scheme = {
       'name': {
         'fg': null,
         'bg': '$secondary'
       }
     };
-    var scheme = {
+    var palette = {
       secondary: '#990000'
     };
-    var result = colors.mapToScheme(map, scheme);
+    var result = colors.outputVars(scheme, palette);
     expect(result['name-fg']).toBeDefined();
     expect(result['name-bg']).toBeDefined();
-    expect(result['name-bg']).toBe(scheme.secondary);
+    expect(result['name-bg']).toBe(palette.secondary);
   });
 
 });

@@ -46,16 +46,17 @@ program
 
 
 /**
- * map.yaml (combos) -> scheme.json
- * map.yaml (combos) -> scheme.scss
- * color-schemer map scheme.yaml combos.json --format=json > scheme.json
+ * color-schemer export scheme.yaml --format=json > colors.json
+ * color-schemer export scheme.yaml --format=js > colors.js
+ * color-schemer export scheme.yaml --format=scss > colors.scss
+ * color-schemer export scheme.yaml --format=yaml > colors.yaml
  */
 program
-  .command('map <yamlMap> <jsonPalette>')
+  .command('export <schemePath>')
   .description('Export a color scheme from a yamlMap, mapping named values to colors using a JSON palette file')
   .option('-f, --format [value]', 'Output format')
-  .action(function(yamlMap, jsonPalette, options) {
-    var out = commands.mapScheme(yamlMap, jsonPalette, options.format);
+  .action(function(schemePath, options) {
+    var out = commands.export(schemePath, options.format);
     console.log(out);
   });
 
