@@ -62,11 +62,11 @@ program
 
 
 /**
- * color-schemer edit scheme.yaml combos.json
+ * color-schemer edit scheme.yaml [palette.json]
  */
 program
   .command('edit <yamlMap> [jsonPalette]')
-  .description('Edit a yaml map in a browser application.')
+  .description('Edit scheme in web browser.')
   .option('-p, --port [value]', 'Port default 8090')
   .action(function(yamlMap, jsonPalette, options) {
     var port = options.port || 8090;
